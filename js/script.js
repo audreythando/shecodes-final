@@ -11,10 +11,10 @@ const contentSectionEl = document.querySelector(".content_section");
 const dayInfoEl = document.querySelector(".day_info");
 const listContentEl = document.querySelector(".list_content ul");
 
-// API Key
-const API = "7308a76037a59eb904a484dcf22e273f";
 
-// default date and location
+const API = "5cba9041b30635d6f8bd2e202330cec2";
+
+
 const days = [
   "Sunday",
   "Monday",
@@ -25,23 +25,22 @@ const days = [
   "Saturday",
 ];
 
-// display day
+
 const day = new Date();
 const dayName = days[day.getDay()];
 dayEl.textContent = dayName;
 
-// Month
+
 let month = day.toLocaleString("default", { month: "long" });
 let date = day.getDate();
 let year = day.getFullYear();
 dateEl.textContent = date + " " + month + " " + year;
 
-// Btn Event
+
 btnEl.addEventListener("click", (e) => {
   e.preventDefault();
 
   if (inputEl.value !== "") {
-    // asign values in the left side location
     const Search = inputEl.value;
     inputEl.value = "";
     findLocation(Search);
@@ -50,7 +49,7 @@ btnEl.addEventListener("click", (e) => {
   }
 });
 
-// find the location weather
+
 async function findLocation(name) {
   try {
     iconContainer.innerHTML = "";
@@ -62,15 +61,11 @@ async function findLocation(name) {
 
     console.log(result);
 
-    // Error Handling
     if (result.cod !== "404") {
-      // display image and tempreture
       const displayImageContent = imgContent(result);
 
-      // display side content
       const sideContent = displaySideContent(result);
 
-      // forecast lat and lon
       displayForeCast(result.coord.lat, result.coord.lon);
 
       setTimeout(() => {
@@ -91,7 +86,6 @@ async function findLocation(name) {
   } catch (error) {}
 }
 
-// display image and tempreture funcation
 function imgContent(resultData) {
   return `<img
   src="https://openweathermap.org/img/wn/${resultData.weather[0].icon}@4x.png"
@@ -102,7 +96,6 @@ function imgContent(resultData) {
   <h3 class="cloudtxt">${resultData.weather[0].description}</h3>`;
 }
 
-// display side bar text
 function displaySideContent(data) {
   return `    <div class="content">
                         <p class="title">NAME</p>
@@ -124,16 +117,12 @@ function displaySideContent(data) {
                         </div>`;
 }
 
-// // forecast API
-// const foreCast_ApI =
-//   "https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lan}&appid=";
-
 async function displayForeCast(lat, long) {
   const foreCast_ApI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=${API}`;
   const data = await fetch(foreCast_ApI);
   const result = await data.json();
 
-  // Filter the forecasts to get only one forecast per day
+
   const uniqueForecastDays = [];
   const fiveDaysForecast = result.list.filter((forecast) => {
     const forecastDate = new Date(forecast.dt_txt).getDate();
@@ -151,9 +140,8 @@ async function displayForeCast(lat, long) {
   console.log(fiveDaysForecast);
 }
 
-// forecast html elements
 function foreCast(frContent) {
-  // display day
+
   const day = new Date(frContent.dt_txt);
   const dayName = days[day.getDay()];
   const splitDay = dayName.split("", 3);
